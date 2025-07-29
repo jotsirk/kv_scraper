@@ -1,4 +1,5 @@
 version: '3.8'
+name: kv_scraper
 
 services:
   app:
