@@ -8,16 +8,16 @@ data class KvPropertyDataDTO(
   val price: Double,
   val isReserved: Boolean = false,
 ) {
-
   fun toModel(
     tick: PropertyTick,
     status: StatusType,
     description: String? = null,
-  ): PropertyLog = PropertyLog(
-    price = price,
-    isReserved = isReserved,
-    status = status,
-    description = description,
-    tick = tick,
-  )
+  ): PropertyLog =
+    PropertyLog(
+      price = price,
+      isReserved = isReserved,
+      status = status,
+      description = description,
+      tick = tick,
+    )
 }

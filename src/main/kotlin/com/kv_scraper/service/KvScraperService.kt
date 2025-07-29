@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class KvScraperService {
-
   @Autowired
   private lateinit var propertyLogRepository: PropertyLogRepository
 
@@ -28,18 +27,19 @@ class KvScraperService {
   }
 
   private fun scrapeDocumentWithOkHttp(url: String): Document? {
-    val request = Request.Builder().url(url)
-      .header(
-        "User-Agent",
-        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
-      )
-      .header("Accept", "*/*").header(
-        "Cookie",
-        "__cf_bm=Wbx6dafFa2yfacQ4G.8jxIoIWjKUEMO0C9dN12b83Ro-1753796970-1.0.1.1-I3appQ0iE5l_zRWxMxK0v1Up8_cra1fQAXSXa6fEC3GkOFcp6ZYi_ynKyqy4YQs6klDDEblj.fK8qYVUeeECv0JQUHRXn7SLD7OTDCzPM18",
-      )
-      .header("User-Agent", "PostmanRuntime/7.29.4")
-      .header("Connection", "keep-alive")
-      .build()
+    val request =
+      Request.Builder().url(url)
+        .header(
+          "User-Agent",
+          "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
+        )
+        .header("Accept", "*/*").header(
+          "Cookie",
+          "__cf_bm=Wbx6dafFa2yfacQ4G.8jxIoIWjKUEMO0C9dN12b83Ro-1753796970-1.0.1.1-I3appQ0iE5l_zRWxMxK0v1Up8_cra1fQAXSXa6fEC3GkOFcp6ZYi_ynKyqy4YQs6klDDEblj.fK8qYVUeeECv0JQUHRXn7SLD7OTDCzPM18",
+        )
+        .header("User-Agent", "PostmanRuntime/7.29.4")
+        .header("Connection", "keep-alive")
+        .build()
 
     return try {
       httpClient.newCall(request).execute().use { response ->
@@ -56,7 +56,6 @@ class KvScraperService {
     }
   }
 
-
   private fun parseDocument(document: Document): KvPropertyDataDTO {
     val price = document.selectFirst("div.label.campaign")?.attr("data-price")
     val thAction = document.selectFirst(".meta-table .table-lined th")?.text()
@@ -69,6 +68,5 @@ class KvScraperService {
   }
 
   companion object {
-
   }
 }

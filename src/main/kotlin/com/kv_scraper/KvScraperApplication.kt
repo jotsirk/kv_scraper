@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class KvScraperApplication
 
 fun main(args: Array<String>) {
-    runApplication<KvScraperApplication>(*args)
+  runApplication<KvScraperApplication>(*args)
 }

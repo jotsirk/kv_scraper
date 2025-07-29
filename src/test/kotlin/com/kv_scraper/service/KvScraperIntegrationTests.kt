@@ -13,24 +13,24 @@ import org.springframework.test.context.ActiveProfiles
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 class KvScraperIntegrationTests {
+  @Autowired
+  private lateinit var service: KvScraperService
 
-    @Autowired
-    private lateinit var service: KvScraperService
+  @Test
+  fun runScraperTest() {
+    // given
+    val propertyTick =
+      PropertyTick(
+        id = 0,
+        origin = PropertyOriginType.KV,
+        propertyKey = "3757253",
+        url = "https://www.kv.ee/3757253",
+      )
 
-    @Test
-    fun runScraperTest() {
-        // given
-        val propertyTick = PropertyTick(
-            id = 0,
-            origin = PropertyOriginType.KV,
-            propertyKey = "3757253",
-            url = "https://www.kv.ee/3757253"
-        )
+    // when
+    service.scrapeAndSavePropertyLog(propertyTick)
 
-        // when
-        service.scrapeAndSavePropertyLog(propertyTick)
-
-        // then
-        println("done")
-    }
+    // then
+    println("done")
+  }
 }
