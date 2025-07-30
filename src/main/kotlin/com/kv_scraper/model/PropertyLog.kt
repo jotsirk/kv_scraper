@@ -17,7 +17,7 @@ import org.hibernate.validator.constraints.Length
 data class PropertyLog(
   @Id
   @GeneratedValue(strategy = IDENTITY)
-  val id: Long = -1,
+  val id: Long? = null,
   @Column
   val price: Double = 0.0,
   @Column

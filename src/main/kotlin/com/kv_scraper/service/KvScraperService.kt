@@ -1,70 +1,103 @@
 package com.kv_scraper.service
 
+import com.kv_scraper.model.DocumentResponse
 import com.kv_scraper.model.PropertyTick
 import com.kv_scraper.model.StatusType.SUCCESS
 import com.kv_scraper.model.dto.KvPropertyDataDTO
 import com.kv_scraper.repository.PropertyLogRepository
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import com.kv_scraper.repository.PropertyTickRepository
+import java.net.URL
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.openqa.selenium.JavascriptExecutor
+import org.openqa.selenium.WebDriver
+import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.remote.RemoteWebDriver
+import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class KvScraperService {
+
+  @Autowired
+  private lateinit var log: Logger
+
   @Autowired
   private lateinit var propertyLogRepository: PropertyLogRepository
 
-  private val httpClient = OkHttpClient()
+  @Autowired
+  private lateinit var propertyTickRepository: PropertyTickRepository
 
-  fun scrapeAndSavePropertyLog(propertyTick: PropertyTick) {
-    val document = scrapeDocumentWithOkHttp(propertyTick.url) ?: return
-    val kvPropertyDataDTO = parseDocument(document)
+  fun createDriver(): WebDriver {
+    val options = ChromeOptions().apply {
+      setAcceptInsecureCerts(true)
+      addArguments(
+        "--disable-blink-features=AutomationControlled",
+        "--start-maximized",
+      )
+      setExperimentalOption("excludeSwitches", listOf("enable-automation"))
+      setExperimentalOption("useAutomationExtension", false)
+      setCapability("se:recordVideo", false)
+    }
+
+    return RemoteWebDriver(URL(System.getenv("SELENIUM_URL")), options).apply {
+      (this as JavascriptExecutor).executeScript(
+        "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})",
+      )
+    }
+  }
+
+  fun scrapeAndSavePropertyLog(propertyTick: PropertyTick, driver: WebDriver) {
+    val response = scrapeDocument(propertyTick.url, driver)
+
+    when (response.responseCode) {
+      200 -> persistProperty(propertyTick, response.document!!)
+      404, 500 -> finishPropertyTick(propertyTick)
+      403 -> return
+      else -> return
+    }
+  }
+
+  private fun scrapeDocument(url: String, driver: WebDriver): DocumentResponse {
+    return try {
+      driver.get(url)
+      val html = driver.pageSource
+
+      if (html == null) {
+        log.info("pagesource is empty : $html")
+        return DocumentResponse(null, 500)
+      }
+
+      if (html.contains("EI ELA ENAM", true)) {
+        DocumentResponse(null, 404)
+      } else if (html.contains("Just a moment", true)) {
+        DocumentResponse(null, 500)
+      } else {
+        DocumentResponse(Jsoup.parse(html), 200)
+      }
+    } catch (e: Exception) {
+      log.error("Selenium failed for $url", e)
+      DocumentResponse(null, 500)
+    }
+  }
+
+  private fun persistProperty(propertyTick: PropertyTick, document: Document) {
+    val price = document.selectFirst("div.label.campaign")?.attr("data-price")
+    val thAction = document.selectFirst(".meta-table .table-lined th")?.text()
+    val isReserved = thAction?.contains("broneeritud", true) == true
+    val kvPropertyDataDTO = KvPropertyDataDTO(
+      price = price?.toDouble() ?: 0.0,
+      isReserved = isReserved,
+    )
 
     val propertyLog = kvPropertyDataDTO.toModel(propertyTick, SUCCESS)
     propertyLogRepository.save(propertyLog)
   }
 
-  private fun scrapeDocumentWithOkHttp(url: String): Document? {
-    val request =
-      Request.Builder().url(url)
-        .header(
-          "User-Agent",
-          "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
-        )
-        .header("Accept", "*/*").header(
-          "Cookie",
-          "__cf_bm=Wbx6dafFa2yfacQ4G.8jxIoIWjKUEMO0C9dN12b83Ro-1753796970-1.0.1.1-I3appQ0iE5l_zRWxMxK0v1Up8_cra1fQAXSXa6fEC3GkOFcp6ZYi_ynKyqy4YQs6klDDEblj.fK8qYVUeeECv0JQUHRXn7SLD7OTDCzPM18",
-        )
-        .header("User-Agent", "PostmanRuntime/7.29.4")
-        .header("Connection", "keep-alive")
-        .build()
-
-    return try {
-      httpClient.newCall(request).execute().use { response ->
-        if (!response.isSuccessful) {
-          println("HTTP error scraping $url: ${response.code}")
-          return null
-        }
-        val body = response.body?.string()
-        if (body != null) Jsoup.parse(body) else null
-      }
-    } catch (e: Exception) {
-      println("Error scraping page $url: ${e.message}")
-      null
-    }
-  }
-
-  private fun parseDocument(document: Document): KvPropertyDataDTO {
-    val price = document.selectFirst("div.label.campaign")?.attr("data-price")
-    val thAction = document.selectFirst(".meta-table .table-lined th")?.text()
-    val isReserved = thAction?.contains("broneeritud", true) == true
-
-    return KvPropertyDataDTO(
-      price = price?.toDouble() ?: 0.0,
-      isReserved = isReserved,
-    )
+  private fun finishPropertyTick(propertyTick: PropertyTick) {
+    val updatedPropertyTick = propertyTick.copy(isFinished = true)
+    propertyTickRepository.save(updatedPropertyTick)
   }
 
   companion object {

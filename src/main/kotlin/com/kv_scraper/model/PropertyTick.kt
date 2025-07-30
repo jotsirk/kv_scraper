@@ -21,7 +21,7 @@ import jakarta.validation.constraints.NotBlank
 data class PropertyTick(
   @Id
   @GeneratedValue(strategy = IDENTITY)
-  val id: Long = -1,
+  val id: Long? = null,
   @NotBlank
   @Enumerated(EnumType.STRING)
   @Column
@@ -34,4 +34,7 @@ data class PropertyTick(
   val url: String,
   @OneToMany(mappedBy = "tick", cascade = [ALL], orphanRemoval = true)
   val logs: List<PropertyLog> = mutableListOf(),
+  @NotBlank
+  @Column
+  val isFinished: Boolean = false,
 )

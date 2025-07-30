@@ -1,5 +1,6 @@
 plugins {
   kotlin("jvm") version "1.9.25"
+  kotlin("plugin.jpa") version "1.9.25"
   kotlin("plugin.spring") version "1.9.25"
   id("org.springframework.boot") version "3.5.4"
   id("io.spring.dependency-management") version "1.1.7"
@@ -27,6 +28,7 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("org.jsoup:jsoup:1.17.2")
   implementation("com.squareup.okhttp3:okhttp:4.12.0")
+  implementation("org.seleniumhq.selenium:selenium-java:4.21.0")
   runtimeOnly("org.postgresql:postgresql")
   testImplementation("org.springframework.boot:spring-boot-starter-test")
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

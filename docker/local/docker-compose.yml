@@ -8,9 +8,25 @@ services:
       dockerfile: Dockerfile-scraper
     ports:
       - "8080:8080"
+      - "8897:8787"
+    environment:
+      SELENIUM_URL: http://selenium:4444/wd/hub
     depends_on:
       postgres:
         condition: service_healthy
+      selenium:
+        condition: service_healthy
+    networks:
+      - scraper-network
+
+  selenium:
+    image: selenium/standalone-chrome:latest
+    ports:
+      - "4444:4444"
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:4444/status" ]
+      interval: 10s
+      retries: 5
     networks:
       - scraper-network
 
