@@ -3,20 +3,27 @@ package com.kv_scraper.model
 import jakarta.persistence.CascadeType.ALL
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType.SEQUENCE
+import jakarta.persistence.GenerationType.IDENTITY
 import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
+import jakarta.persistence.UniqueConstraint
 import jakarta.validation.constraints.NotBlank
 
 @Entity
-@Table(name = "property_ticks")
+@Table(
+  name = "property_ticks",
+  uniqueConstraints = [UniqueConstraint(columnNames = ["origin", "property_key"])],
+)
 data class PropertyTick(
   @Id
-  @GeneratedValue(strategy = SEQUENCE)
+  @GeneratedValue(strategy = IDENTITY)
   val id: Long = -1,
   @NotBlank
+  @Enumerated(EnumType.STRING)
   @Column
   val origin: PropertyOriginType,
   @NotBlank

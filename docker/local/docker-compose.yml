@@ -4,17 +4,10 @@ name: kv_scraper
 services:
   app:
     build:
-      context: ../dockerfile
+      context: ../../
       dockerfile: Dockerfile-scraper
     ports:
       - "8080:8080"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/scraper_db
-      - SPRING_DATASOURCE_USERNAME=scraper_user
-      - SPRING_DATASOURCE_PASSWORD=scraper_password
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_JPA_SHOW_SQL=true
-      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
     depends_on:
       postgres:
         condition: service_healthy

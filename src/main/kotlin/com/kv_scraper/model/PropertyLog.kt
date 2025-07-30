@@ -4,19 +4,19 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
+import jakarta.persistence.GenerationType.IDENTITY
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
-import org.hibernate.validator.constraints.Length
 import java.time.LocalDateTime
+import org.hibernate.validator.constraints.Length
 
 @Entity
 @Table(name = "property_logs")
 data class PropertyLog(
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @GeneratedValue(strategy = IDENTITY)
   val id: Long = -1,
   @Column
   val price: Double = 0.0,

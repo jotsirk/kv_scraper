@@ -8,13 +8,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class PropertyScraperJob {
+
   @Autowired
   private lateinit var propertyTickRepository: PropertyTickRepository
 
   @Autowired
   private lateinit var scraperService: KvScraperService
 
-  @Scheduled(cron = "0 0 12 * * *")
+  @Scheduled(cron = "0 30 12 * * *")
   fun runDailyScrape() {
     val propertyTicks = propertyTickRepository.findAll()
     propertyTicks.forEach { tick ->
