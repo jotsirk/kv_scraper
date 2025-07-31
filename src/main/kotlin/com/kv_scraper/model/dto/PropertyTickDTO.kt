@@ -1,16 +1,13 @@
 package com.kv_scraper.model.dto
 
+import com.kv_scraper.model.PropertyLog
 import com.kv_scraper.model.PropertyOriginType
-import com.kv_scraper.model.PropertyTick
 
 data class PropertyTickDTO(
+  val id: Long,
   val origin: PropertyOriginType,
   val propertyKey: String,
-) {
-
-  fun toModel() = PropertyTick(
-    origin = origin,
-    propertyKey = propertyKey,
-    url = "${origin.url}/${propertyKey}"
-  )
-}
+  val url: String,
+  val logs: List<PropertyLog>,
+  val isFinished: Boolean,
+)

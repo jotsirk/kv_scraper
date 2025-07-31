@@ -1,5 +1,7 @@
 package com.kv_scraper.model
 
+import com.fasterxml.jackson.annotation.JsonManagedReference
+import com.kv_scraper.model.dto.PropertyTickDTO
 import jakarta.persistence.CascadeType.ALL
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -34,8 +36,19 @@ data class PropertyTick(
   @Column(length = 250)
   val url: String,
   @OneToMany(mappedBy = "tick", cascade = [ALL], orphanRemoval = true)
+  @JsonManagedReference
   val logs: List<PropertyLog> = mutableListOf(),
   @NotBlank
   @Column
   val isFinished: Boolean = false,
-)
+) {
+
+  fun toDTO() = PropertyTickDTO(
+    id = id ?: 0L,
+    origin = origin,
+    propertyKey = propertyKey,
+    url = url,
+    logs = logs,
+    isFinished = isFinished,
+  )
+}

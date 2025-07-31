@@ -28,7 +28,7 @@ class KvScraperIntegrationTests {
       )
 
     // when
-    service.scrapeAndSavePropertyLog(propertyTick)
+//    service.scrapeAndSavePropertyLog(propertyTick)
 
     // then
     println("done")

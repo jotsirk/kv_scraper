@@ -11,6 +11,10 @@ class PropertyTickService {
   @Autowired
   private lateinit var propertyTickRepository: PropertyTickRepository
 
+  fun findAll(): List<PropertyTick> {
+    return propertyTickRepository.findAll()
+  }
+
   fun save(propertyTick: PropertyTick) {
     propertyTickRepository.save(propertyTick)
   }

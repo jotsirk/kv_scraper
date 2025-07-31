@@ -1,5 +1,6 @@
 package com.kv_scraper.model
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -25,5 +26,6 @@ data class PropertyLog(
   val createdAt: LocalDateTime = LocalDateTime.now(),
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "property_tick_id", nullable = false)
+  @JsonBackReference
   val tick: PropertyTick,
 )
