@@ -40,6 +40,7 @@ class PropertyScraperJob {
         Thread.sleep(waitMillis)
       }
     } finally {
+      log.info("Finished scraping")
       driver.quit()
     }
   }

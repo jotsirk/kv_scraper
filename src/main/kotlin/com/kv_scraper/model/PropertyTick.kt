@@ -4,6 +4,7 @@ import jakarta.persistence.CascadeType.ALL
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
+import jakarta.persistence.EnumType.STRING
 import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType.IDENTITY
@@ -23,7 +24,7 @@ data class PropertyTick(
   @GeneratedValue(strategy = IDENTITY)
   val id: Long? = null,
   @NotBlank
-  @Enumerated(EnumType.STRING)
+  @Enumerated(STRING)
   @Column
   val origin: PropertyOriginType,
   @NotBlank

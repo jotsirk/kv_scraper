@@ -2,7 +2,6 @@ package com.kv_scraper.service
 
 import com.kv_scraper.model.DocumentResponse
 import com.kv_scraper.model.PropertyTick
-import com.kv_scraper.model.StatusType.SUCCESS
 import com.kv_scraper.model.dto.KvPropertyDataDTO
 import com.kv_scraper.repository.PropertyLogRepository
 import com.kv_scraper.repository.PropertyTickRepository
@@ -53,8 +52,8 @@ class KvScraperService {
 
     when (response.responseCode) {
       200 -> persistProperty(propertyTick, response.document!!)
-      404, 500 -> finishPropertyTick(propertyTick)
-      403 -> return
+      404 -> finishPropertyTick(propertyTick)
+      403, 500 -> return
       else -> return
     }
   }
@@ -91,7 +90,7 @@ class KvScraperService {
       isReserved = isReserved,
     )
 
-    val propertyLog = kvPropertyDataDTO.toModel(propertyTick, SUCCESS)
+    val propertyLog = kvPropertyDataDTO.toModel(propertyTick)
     propertyLogRepository.save(propertyLog)
   }
 

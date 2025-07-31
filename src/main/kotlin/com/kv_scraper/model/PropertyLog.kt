@@ -10,7 +10,6 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import java.time.LocalDateTime
-import org.hibernate.validator.constraints.Length
 
 @Entity
 @Table(name = "property_logs")
@@ -24,11 +23,6 @@ data class PropertyLog(
   val isReserved: Boolean = false,
   @Column
   val createdAt: LocalDateTime = LocalDateTime.now(),
-  @Column
-  val status: StatusType,
-  @Column
-  @Length(max = 500)
-  val description: String? = null,
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "property_tick_id", nullable = false)
   val tick: PropertyTick,
