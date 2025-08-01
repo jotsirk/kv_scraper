@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListSubheader from '@mui/material/ListSubheader';
-import Select, { SelectChangeEvent, selectClasses } from '@mui/material/Select';
+import Select, { selectClasses } from '@mui/material/Select';
 import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
@@ -29,8 +29,8 @@ const ListItemAvatar = styled(MuiListItemAvatar)({
 export default function SelectContent() {
   const [company, setCompany] = React.useState('');
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setCompany(event.target.value as string);
+  const handleChange = (event) => {
+    setCompany(event.target.value);
   };
 
   return (

@@ -1,19 +1,22 @@
 import * as React from 'react';
-import {alpha} from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import AppNavbar from './components/AppNavbar';
-import Header from './components/Header';
-import MainGrid from './components/MainGrid';
-import SideMenu from './components/SideMenu';
+import {useState} from 'react';
+
 import AppTheme from '../shared-theme/AppTheme';
 import {
-  chartsCustomizations,
-  dataGridCustomizations,
-  datePickersCustomizations,
-  treeViewCustomizations,
-} from './theme/customizations';
+    chartsCustomizations,
+    dataGridCustomizations,
+    datePickersCustomizations,
+    treeViewCustomizations
+} from "./theme/customizations";
+import CssBaseline from "@mui/material/CssBaseline";
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import SideMenu from "./components/SideMenu";
+import AppNavbar from "./components/AppNavbar";
+import {alpha} from '@mui/material';
+import Header from './components/Header';
+import MainGrid from './components/MainGrid';
+import { Outlet } from 'react-router-dom';
 
 const xThemeComponents = {
   ...chartsCustomizations,
@@ -23,13 +26,25 @@ const xThemeComponents = {
 };
 
 export default function Dashboard(props: { disableCustomTheme?: boolean }) {
+    const [selectedIndex, setSelectedIndex] = useState(0)
+
+    const renderHeader = () => {
+        switch (selectedIndex) {
+            case 0:
+                return <Header title="All Ticks"/>
+            case 1:
+                return <Header title="Add Tick"/>
+            default:
+                return <Header title="Dashboard"/>
+        }
+    }
+
   return (
     <AppTheme {...props} themeComponents={xThemeComponents}>
-      <CssBaseline enableColorScheme/>
-      <Box sx={{display: 'flex'}}>
-        <SideMenu/>
-        <AppNavbar/>
-        {/* Main content */}
+        <CssBaseline enableColorScheme/>
+        <Box sx={{display: 'flex'}}>
+            <SideMenu />
+            <AppNavbar />
         <Box
           component="main"
           sx={(theme) => ({
@@ -49,8 +64,8 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
               mt: {xs: 8, md: 0},
             }}
           >
-            <Header/>
-            <MainGrid/>
+              { renderHeader() }
+              <Outlet />
           </Stack>
         </Box>
       </Box>

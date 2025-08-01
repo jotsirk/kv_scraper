@@ -8,7 +8,6 @@ export default function TicksList() {
   useEffect(() => {
     getAllTicks()
       .then(data => {
-        console.log(data);
         return setTicks(data);
       })
       .catch(err => setError(err.message))
