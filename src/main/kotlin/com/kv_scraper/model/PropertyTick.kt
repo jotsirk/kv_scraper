@@ -5,7 +5,6 @@ import com.kv_scraper.model.dto.PropertyTickDTO
 import jakarta.persistence.CascadeType.ALL
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
 import jakarta.persistence.EnumType.STRING
 import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
@@ -41,6 +40,9 @@ data class PropertyTick(
   @NotBlank
   @Column
   val isFinished: Boolean = false,
+  @NotBlank
+  @Column
+  val imageUrl: String,
 ) {
 
   fun toDTO() = PropertyTickDTO(
@@ -48,7 +50,16 @@ data class PropertyTick(
     origin = origin,
     propertyKey = propertyKey,
     url = url,
-    logs = logs,
+    logs = logs.map { it.toDTO() },
     isFinished = isFinished,
+    isReserved = isPropertyReserved(),
+    imageUrl = imageUrl,
   )
+
+  fun isPropertyReserved(): Boolean {
+    return logs
+      .maxByOrNull { it.createdAt }
+      ?.isReserved
+      ?: false
+  }
 }

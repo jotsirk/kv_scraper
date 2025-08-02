@@ -1,6 +1,7 @@
 package com.kv_scraper.model
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import com.kv_scraper.model.dto.PropertyLogDTO
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -28,4 +29,11 @@ data class PropertyLog(
   @JoinColumn(name = "property_tick_id", nullable = false)
   @JsonBackReference
   val tick: PropertyTick,
-)
+) {
+
+  fun toDTO() = PropertyLogDTO(
+    id = id ?: 0L,
+    price = price,
+    createdAt = createdAt,
+  )
+}
