@@ -15,8 +15,7 @@ import SideMenu from "./components/SideMenu";
 import AppNavbar from "./components/AppNavbar";
 import {alpha} from '@mui/material';
 import Header from './components/Header';
-import MainGrid from './components/MainGrid';
-import { Outlet } from 'react-router-dom';
+import {Outlet} from 'react-router-dom';
 
 const xThemeComponents = {
   ...chartsCustomizations,
