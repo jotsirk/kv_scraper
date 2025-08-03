@@ -6,7 +6,7 @@ import {PropertyTick} from '../types/tick'
 import ListItem from "@mui/material/ListItem";
 import Card from '@mui/material/Card'
 import CardMedia from '@mui/material/CardMedia'
-import {Box, CardContent, Chip, Typography} from '@mui/material'
+import {Box, CardContent, Chip, Link, Typography} from '@mui/material'
 import {CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts';
 
 export default function TicksList() {
@@ -23,6 +23,8 @@ export default function TicksList() {
 
   if (error) return <Typography color="error">Error: {error}</Typography>;
   if (!ticks.length) return <Typography>Loading ticks…</Typography>;
+
+  console.log(window.location.hostname);
 
   return (
     <Stack sx={{flexGrow: 1, p: 1}} spacing={2}>
@@ -62,11 +64,19 @@ export default function TicksList() {
                 <Box sx={{display: 'flex', flexDirection: 'column', flex: 1}}>
                   <CardContent sx={{flex: '1 0 auto'}}>
                     <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                      <Typography variant="h6">
-                        {tick.propertyKey}
-                        <Typography variant="subtitle2" component="span" sx={{ml: 2}}>
-                          (Latest: ${latestPrice.toFixed(2)})
+                      <Link
+                        href={tick.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
+                        color="textPrimary"
+                      >
+                        <Typography variant="h6" component="span">
+                          {tick.propertyKey}
                         </Typography>
+                      </Link>
+                      <Typography variant="subtitle2" component="span" sx={{ ml: 2 }}>
+                        (Latest: ${latestPrice.toFixed(2)})
                       </Typography>
                       <Box sx={{display: 'flex', gap: 1}}>
                         {tick.isReserved && <Chip label="Reserved" color="warning" size="small"/>}

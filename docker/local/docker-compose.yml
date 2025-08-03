@@ -10,6 +10,7 @@ services:
       - "8080:8080"
       - "8897:8787"
     environment:
+      TZ: Europe/Tallinn
       SELENIUM_URL: http://selenium:4444/wd/hub
     depends_on:
       postgres:

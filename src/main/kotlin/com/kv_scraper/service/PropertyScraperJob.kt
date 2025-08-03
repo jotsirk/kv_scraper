@@ -19,7 +19,7 @@ class PropertyScraperJob {
   @Autowired
   private lateinit var scraperService: KvScraperService
 
-  @Scheduled(cron = "0 0 12 * * *")
+  @Scheduled(cron = "0 30 10 * * *")
   fun runDailyScrape() {
     log.info("Starting daily scrape")
 

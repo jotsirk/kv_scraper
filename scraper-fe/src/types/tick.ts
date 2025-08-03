@@ -4,6 +4,7 @@ export interface PropertyTick {
   imageUrl: string,
   isFinished: boolean,
   isReserved: boolean,
+  url: string;
   logs: PropertyLog[],
 }
 
