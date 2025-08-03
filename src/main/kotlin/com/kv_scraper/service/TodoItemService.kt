@@ -11,9 +11,21 @@ class TodoItemService {
   @Autowired
   private lateinit var todoItemRepository: TodoItemRepository
 
+  fun add(todoItem: TodoItem): TodoItem {
+    return todoItemRepository.save(todoItem)
+  }
+
   fun findAll(): List<TodoItem> = todoItemRepository.findAll()
 
   fun getAllUnfinished(): List<TodoItem> = todoItemRepository.findAllByIsFinishedIsFalse()
 
   fun getAllFinished(): List<TodoItem> = todoItemRepository.findAllByIsFinishedIsTrue()
+
+  fun finish(id: Long) {
+    todoItemRepository.setFinished(id)
+  }
+
+  fun unfinish(id: Long) {
+    todoItemRepository.setUnfinished(id)
+  }
 }

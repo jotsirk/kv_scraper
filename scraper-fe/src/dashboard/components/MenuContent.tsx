@@ -18,6 +18,8 @@ export interface MenuItem {
 export const mainListItems: MenuItem[] = [
   { text: 'Home',     icon: <HomeRoundedIcon />, path: '/' },
   { text: 'Add tick', icon: <HomeRoundedIcon />, path: '/add-tick' },
+  { text: 'Add todo item', icon: <HomeRoundedIcon />, path: '/add-todo-item' },
+  { text: 'Todo', icon: <HomeRoundedIcon />, path: '/todo' },
 ];
 
 export default function MenuContent() {
