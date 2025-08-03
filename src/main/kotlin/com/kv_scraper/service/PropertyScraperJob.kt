@@ -14,7 +14,7 @@ class PropertyScraperJob {
   private lateinit var log: Logger
 
   @Autowired
-  private lateinit var propertyTickRepository: PropertyTickRepository
+  private lateinit var propertyTickService: PropertyTickService
 
   @Autowired
   private lateinit var scraperService: KvScraperService
@@ -23,7 +23,7 @@ class PropertyScraperJob {
   fun runDailyScrape() {
     log.info("Starting daily scrape")
 
-    val propertyTicks = propertyTickRepository.findAll()
+    val propertyTicks = propertyTickService.findAllActive()
     val driver = scraperService.createDriver()
 
     try {

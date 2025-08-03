@@ -43,6 +43,9 @@ data class PropertyTick(
   @NotBlank
   @Column
   val imageUrl: String,
+  @NotBlank
+  @Column
+  val isArchived: Boolean = false,
 ) {
 
   fun toDTO() = PropertyTickDTO(

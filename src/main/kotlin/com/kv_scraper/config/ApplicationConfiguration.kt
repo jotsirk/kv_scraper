@@ -22,8 +22,8 @@ class ApplicationConfiguration: WebMvcConfigurer {
 
   override fun addCorsMappings(registry: CorsRegistry) {
     registry.addMapping("/api/**")
-      .allowedOrigins("http://localhost:3000", "http://192.168.3.28:3000")
-      .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+      .allowedOrigins("http://localhost:3000", "http://192.168.3.28:3000", "192.168.3.51:3000")
+      .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
       .allowCredentials(true)
       .maxAge(3600)
   }

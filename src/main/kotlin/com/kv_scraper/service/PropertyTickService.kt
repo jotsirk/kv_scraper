@@ -15,7 +15,13 @@ class PropertyTickService {
     return propertyTickRepository.findAll()
   }
 
+  fun findAllActive(): List<PropertyTick> = propertyTickRepository.findAllByIsArchivedIsFalse()
+
   fun save(propertyTick: PropertyTick) {
     propertyTickRepository.save(propertyTick)
+  }
+
+  fun archiveTick(tickId: Long) {
+    propertyTickRepository.setArchived(tickId)
   }
 }
